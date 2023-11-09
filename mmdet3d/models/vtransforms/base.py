@@ -89,12 +89,15 @@ class BaseTransform(nn.Module):
 
         # undo post-transformation
         # B x N x D x H x W x 3
-        points = self.frustum - post_trans.view(B, N, 1, 1, 1, 3)
+        points = self.frustum - post_trans.view(B, N, 1, 1, 1, 3)  # torch.Size([1, 6, 118, 32, 88, 3])
         points = (
-            torch.inverse(post_rots)
+            torch.inverse(post_rots)  # torch.Size([1, 6, 3, 3])
             .view(B, N, 1, 1, 1, 3, 3)
             .matmul(points.unsqueeze(-1))
         )
+        # post_rots=torch.inverse(post_rots).view(B, N, 1, 1, 1, 3, 3)
+        # points=post_rots.matmul(points.unsqueeze(-1))
+
         # cam_to_lidar
         points = torch.cat(
             (

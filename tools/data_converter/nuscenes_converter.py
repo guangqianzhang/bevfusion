@@ -95,6 +95,7 @@ def create_nuscenes_infos(
         print(
             "train scene: {}, val scene: {}".format(len(train_scenes), len(val_scenes))
         )
+    # nusc.sample = nusc.sample[:10120]
     train_nusc_infos, val_nusc_infos = _fill_trainval_infos(
         nusc, train_scenes, val_scenes, test, max_sweeps=max_sweeps
     )
@@ -152,6 +153,10 @@ def get_available_scenes(nusc):
                 scene_not_exist = True
                 break
             else:
+                # >>>>>>>>>>>>>>>>>>>>>>>>>
+                if not os.path.exists(lidar_path):
+                    scene_not_exist=True
+                # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>
                 break
         if scene_not_exist:
             continue
